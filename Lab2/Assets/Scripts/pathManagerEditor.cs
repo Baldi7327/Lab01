@@ -55,6 +55,9 @@ public class pathManagerEditor : Editor
                 EditorGUILayout.BeginHorizontal();
                 wayPoint p = thePath[i];
 
+                Color c = GUI.color;
+                if (selectedPoint == p) GUI.color = Color.green;
+
                 Vector3 oldPos = p.GetPos();
                 Vector3 newPos = EditorGUILayout.Vector3Field("", oldPos);
 
@@ -66,6 +69,7 @@ public class pathManagerEditor : Editor
                     toDelete.Add(i);
                 }
 
+                GUI.color = c;
                 EditorGUILayout.EndHorizontal();
             }
         }
@@ -106,5 +110,39 @@ public class pathManagerEditor : Editor
         Handles.DrawLine(p1.GetPos(), p2.GetPos());
         Handles.color = c;
     }
+    public bool DrawPoint(wayPoint p)
+    {
+        bool isChanged = false;
+        if (selectedPoint == p)
+        {
+            Color c = Handles.color;
+            Handles.color = Color.green;
 
+            EditorGUI.BeginChangeCheck();
+            Vector3 oldPos = p.GetPos();
+            Vector3 newPos = Handles.PositionHandle(oldPos, Quaternion.identity);
+
+            float handleSize = HandleUtility.GetHandleSize(newPos);
+
+            Handles.SphereHandleCap(-1, newPos, Quaternion.identity, 0.25f + handleSize, EventType.Repaint);
+            if (EditorGUI.EndChangeCheck())
+            {
+                p.SetPos(newPos);
+            }
+
+            Handles.color = c;
+
+        }
+        else
+        {
+            Vector3 currentPos = p.GetPos();
+            float handleSize = HandleUtility.GetHandleSize(currentPos);
+            if (Handles.Button(currentPos,Quaternion.identity,0.25f + handleSize,0.25f + handleSize, Handles.SphereHandleCap))
+            {
+                isChanged = true;
+                selectedPoint = p;
+            }
+        }
+        return isChanged;
+    }
 }
