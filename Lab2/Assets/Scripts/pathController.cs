@@ -13,8 +13,12 @@ public class pathController : MonoBehaviour
     public float moveSpeed;
     public float rotateSpeed;
 
+    public Animator Animator;
+    bool isRunning;
+
     private void Start()
     {
+        isRunning = false;Animator.SetBool("isRunning", isRunning);
         thePath = PathManager.GetPath();
         if (thePath != null && thePath.Count > 0)
         {
@@ -46,7 +50,25 @@ public class pathController : MonoBehaviour
     }
     private void Update()
     {
-        RotateTowardsTarget();
-        MoveForward();
+        if (Input.anyKeyDown)
+        {
+            //toggle if any key is pressed
+            isRunning = !isRunning;
+            Animator.SetBool("isRunning", isRunning);
+        }
+        if (isRunning)
+        {
+            RotateTowardsTarget();
+            MoveForward();
+        }
+        
     }
+
+    private void OnTriggerEnter(Collider other)
+    {
+        //switch to next target
+        target = PathManager.GetNextTarget();
+    }
+
+    
 }

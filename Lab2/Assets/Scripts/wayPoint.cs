@@ -7,7 +7,7 @@ public class wayPoint
 {
     [SerializeField]
     public Vector3 pos;
-    public void SetPos(Vector3, newPos)
+    public void SetPos(Vector3 newPos)
     {
         pos = newPos;
     }

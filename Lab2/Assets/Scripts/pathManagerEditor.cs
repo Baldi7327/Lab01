@@ -40,7 +40,7 @@ public class pathManagerEditor : Editor
         //Button for adding a point to the path
         if (GUILayout.Button("Add Button to Path"))
         {
-            PathManager.CreateAddPoint();
+            PathManager.CreateAddPath();
         }
         EditorGUILayout.EndVertical();
         SceneView.RepaintAll();
@@ -50,13 +50,13 @@ public class pathManagerEditor : Editor
     {
         if (thePath != null && thePath.Count > 0)
         {
-            for (int i = 0; i > thePath.Count; i++)
+            for (int i = 0; i < thePath.Count; i++)
             {
                 EditorGUILayout.BeginHorizontal();
                 wayPoint p = thePath[i];
 
-                Color c = GUI.color;
-                if (selectedPoint == p) GUI.color = Color.green;
+                //Color c = GUI.color;
+                //if (selectedPoint == p) GUI.color = Color.green;
 
                 Vector3 oldPos = p.GetPos();
                 Vector3 newPos = EditorGUILayout.Vector3Field("", oldPos);
@@ -69,7 +69,7 @@ public class pathManagerEditor : Editor
                     toDelete.Add(i);
                 }
 
-                GUI.color = c;
+                //GUI.color = c;
                 EditorGUILayout.EndHorizontal();
             }
         }
@@ -78,8 +78,9 @@ public class pathManagerEditor : Editor
             foreach (int i in toDelete)
             {
                 thePath.RemoveAt(i);//remove from the path
-                toDelete.Clear();//clear the delete list for the next use
+               
             }
+            toDelete.Clear();//clear the delete list for the next use
         }
     }
     public void DrawPath(List<wayPoint> path)
@@ -145,4 +146,6 @@ public class pathManagerEditor : Editor
         }
         return isChanged;
     }
+
+    
 }
